@@ -1,0 +1,502 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #f97316;
+  --accent: #0f172a;
+  --site-bg: #fafafa;
+  --site-bg-2: #fafafa;
+  --bg-angle: 135deg;
+
+  --view-deal: #2563eb;
+  --category-selected: #2563eb;
+  --sort-selected: #2563eb;
+  --hover: #2563eb;
+  --header-cta: #2563eb;
+  --footer-action: #2563eb;
+  --other-primary: #2563eb;
+}
+
+html,
+body {
+  background-color: var(--site-bg);
+}
+
+/* ============================
+   BACKGROUND STYLES
+   (controlled from Settings -> Background)
+   solid   -> flat --site-bg color
+   gradient-> static gradient between --site-bg and --site-bg-2
+   animated-> the same gradient, slowly drifting
+   ============================ */
+
+.animated-bg {
+  background-color: var(--site-bg);
+  background-size: 100% 100%;
+}
+
+[data-bg-style="gradient"] .animated-bg,
+[data-bg-style="animated"] .animated-bg {
+  background-image: linear-gradient(
+    var(--bg-angle),
+    var(--site-bg),
+    var(--site-bg-2)
+  );
+  background-size: 200% 200%;
+}
+
+[data-bg-style="animated"] .animated-bg {
+  animation: bgDrift 16s ease infinite;
+}
+
+[data-animation="none"] .animated-bg {
+  animation: none !important;
+  background-position: 0% 50%;
+}
+
+@keyframes bgDrift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Reusable soft gradient text/surface, driven by the same two colors,
+   for hero-style accents anywhere on the site */
+.brand-gradient-surface {
+  background-image: linear-gradient(
+    var(--bg-angle),
+    var(--primary),
+    var(--other-primary)
+  );
+}
+
+/* ============================
+   ADMIN FORM FIELDS
+   (used by Product / Category / Banner forms)
+   ============================ */
+
+.field-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.field:focus {
+  border-color: var(--other-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--other-primary) 12%, transparent);
+}
+
+textarea.field {
+  resize: vertical;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toggle input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--other-primary);
+  cursor: pointer;
+}
+
+.toggle:has(input:checked) {
+  border-color: var(--other-primary);
+  background-color: color-mix(in srgb, var(--other-primary) 8%, white);
+  color: var(--other-primary);
+}
+
+/* ============================
+   ADMIN SETTINGS PAGE
+   ============================ */
+
+.settings-primary-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--other-primary);
+}
+
+.settings-save-button {
+  background-color: var(--other-primary);
+}
+
+.settings-save-button:hover {
+  filter: brightness(0.92);
+}
+
+.settings-save-button:disabled {
+  cursor: not-allowed;
+}
+
+/* ============================
+   SITE ANIMATION PRESETS
+   (controlled from Settings -> Animation)
+   ============================ */
+
+[data-animation="none"] * {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-animation="minimal"] * {
+  transition-duration: 120ms !important;
+}
+
+[data-animation="energetic"] * {
+  transition-duration: 450ms !important;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ============================
+   THEME PRESET VISUAL SYSTEM
+   ============================ */
+
+.theme-preset-card {
+  min-height: 104px;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.theme-preset-card:hover {
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--other-primary) 12%, transparent);
+}
+
+[data-theme="midnight"] body,
+[data-theme="neon"] body {
+  color: #e5e7eb;
+}
+
+[data-theme="midnight"] .bg-white,
+[data-theme="neon"] .bg-white {
+  background-color: color-mix(in srgb, var(--site-bg) 88%, white) !important;
+  border-color: color-mix(in srgb, white 12%, transparent) !important;
+}
+
+[data-theme="midnight"] .text-slate-950,
+[data-theme="neon"] .text-slate-950 {
+  color: #f8fafc;
+}
+
+[data-theme="midnight"] .text-slate-500,
+[data-theme="neon"] .text-slate-500 {
+  color: #94a3b8;
+}
+
+[data-theme="midnight"] .bg-slate-50,
+[data-theme="neon"] .bg-slate-50 {
+  background-color: color-mix(in srgb, var(--site-bg) 78%, white) !important;
+}
+
+[data-theme="neon"] .theme-preset-card:hover,
+[data-theme="energetic"] .theme-preset-card:hover {
+  transform: translateY(-3px) scale(1.01);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ============================
+   PRO THEME SYSTEM
+   ============================ */
+
+.product-grid {
+  min-width: 0;
+}
+
+@media (max-width: 639px) {
+  .responsive-product-grid {
+    grid-template-columns: repeat(var(--mobile-product-columns, 2), minmax(0, 1fr)) !important;
+  }
+
+  .responsive-product-grid {
+    gap: 0.75rem !important;
+  }
+}
+
+.theme-card-surface {
+  background: color-mix(in srgb, var(--theme-surface, #ffffff) 96%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 14%, #e2e8f0);
+}
+
+.theme-header {
+  background: color-mix(in srgb, var(--theme-header, #ffffff) 96%, transparent) !important;
+  border-color: color-mix(in srgb, var(--primary) 12%, transparent) !important;
+  backdrop-filter: blur(18px);
+}
+
+.theme-footer {
+  background: var(--theme-footer, var(--accent)) !important;
+}
+
+.theme-panel {
+  background: color-mix(in srgb, var(--theme-surface, #ffffff) 96%, transparent);
+  border-color: color-mix(in srgb, var(--primary) 12%, #e2e8f0);
+}
+
+.theme-preview-swatch {
+  position: relative;
+  overflow: hidden;
+}
+.theme-preview-swatch::after {
+  content: "";
+  position: absolute;
+  inset: 20% -10%;
+  border-radius: 999px;
+  background: color-mix(in srgb, white 20%, transparent);
+  transform: rotate(-12deg);
+}
+
+.splash-screen {
+  isolation: isolate;
+}
+.splash-orb {
+  position: absolute;
+  width: 34rem;
+  height: 34rem;
+  border-radius: 999px;
+  opacity: .14;
+  filter: blur(70px);
+  animation: splashFloat 8s ease-in-out infinite alternate;
+}
+.splash-orb-one { top: -12rem; left: -10rem; }
+.splash-orb-two { right: -12rem; bottom: -14rem; animation-delay: -3s; }
+.splash-scan::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--splash-accent, white) 8%, transparent), transparent);
+  transform: translateX(-100%);
+  animation: splashScan 1.8s linear infinite;
+}
+.splash-minimal .splash-orb,
+.splash-zoom .splash-orb { opacity: .06; }
+.splash-zoom .splash-orb { animation-duration: 12s; }
+
+@keyframes splashFloat {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to { transform: translate3d(40px,-24px,0) scale(1.12); }
+}
+@keyframes splashScan {
+  to { transform: translateX(100%); }
+}
+
+/* Theme personalities: these affect surfaces, density, glow and corners
+   without changing application content. */
+[data-theme="midnight"], [data-theme="neon"] {
+  --theme-surface: #0b1220;
+  --theme-header: #08111f;
+  --theme-footer: #020617;
+}
+[data-theme="royal"], [data-theme="lavender"], [data-theme="plum"], [data-theme="berry"], [data-theme="candy"] {
+  --theme-surface: #ffffff;
+  --theme-header: #fffaff;
+  --theme-footer: #24113f;
+}
+[data-theme="ocean"], [data-theme="aqua"], [data-theme="teal"], [data-theme="sapphire"], [data-theme="sky"] {
+  --theme-surface: #f7feff;
+  --theme-header: #f3fdff;
+  --theme-footer: #063449;
+}
+[data-theme="emerald"], [data-theme="forest"], [data-theme="mint"], [data-theme="aurora"] {
+  --theme-surface: #f8fffb;
+  --theme-header: #f4fff9;
+  --theme-footer: #063b29;
+}
+[data-theme="ruby"], [data-theme="rose"], [data-theme="coral"] {
+  --theme-surface: #fffafb;
+  --theme-header: #fff7f8;
+  --theme-footer: #4a0b1e;
+}
+[data-theme="gold"], [data-theme="copper"] {
+  --theme-surface: #fffdf7;
+  --theme-header: #fffaf0;
+  --theme-footer: #2a1a08;
+}
+[data-theme="mono"], [data-theme="slate"] {
+  --theme-surface: #ffffff;
+  --theme-header: #ffffff;
+  --theme-footer: #0f172a;
+}
+[data-theme="indigo"] {
+  --theme-surface: #fafaff;
+  --theme-header: #f7f7ff;
+  --theme-footer: #1e1b4b;
+}
+[data-theme="sunset"] {
+  --theme-surface: #fffdfb;
+  --theme-header: #fffaf6;
+  --theme-footer: #24150d;
+}
+
+[data-theme="neon"] .theme-card-surface,
+[data-theme="midnight"] .theme-card-surface {
+  box-shadow: 0 14px 45px color-mix(in srgb, var(--primary) 12%, transparent);
+}
+[data-theme="gold"] .theme-card-surface,
+[data-theme="copper"] .theme-card-surface {
+  border-radius: 14px;
+}
+[data-theme="neon"] .theme-card-surface {
+  border-radius: 18px;
+}
+[data-theme="aqua"] .theme-card-surface,
+[data-theme="ocean"] .theme-card-surface {
+  backdrop-filter: blur(12px);
+}
+[data-theme="candy"] .theme-card-surface,
+[data-theme="coral"] .theme-card-surface {
+  border-radius: 30px;
+}
+
+@media (max-width: 639px) {
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  img, video, canvas, svg {
+    max-width: 100%;
+  }
+}
+
+
+/* Fast interaction motion: transform/opacity only for smooth GPU-friendly transitions. */
+.product-grid > * {
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.001ms !important; }
+}
+
+
+/* ============================================================
+   MOBILE-FIRST VISIBILITY & TOUCH POLISH
+   Keep every section reachable on small screens without clipping.
+   ============================================================ */
+@media (max-width: 639px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .theme-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Never let long admin labels, URLs or titles push the viewport wider. */
+  h1, h2, h3, h4, p, a, button, label, span, input, textarea, select {
+    overflow-wrap: anywhere;
+  }
+
+  /* Keep product cards compact but readable on narrow phones. */
+  .responsive-product-grid {
+    grid-template-columns: repeat(var(--mobile-product-columns, 2), minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+
+  .responsive-product-grid > * {
+    min-width: 0;
+  }
+
+  /* Horizontal controls are intentionally scrollable, never clipped. */
+  .mobile-scroll-x,
+  .overflow-x-auto {
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-scroll-x::-webkit-scrollbar,
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Comfortable touch targets. */
+  button, [role="button"], a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Admin/settings cards use less edge padding on phones. */
+  .settings-mobile-card {
+    border-radius: 1.25rem;
+    padding: 1rem;
+  }
+
+  /* Prevent tables/cards from disappearing outside the viewport. */
+  .mobile-safe-width {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .responsive-product-grid {
+    gap: 0.55rem !important;
+  }
+
+  .theme-card-surface {
+    border-radius: 1rem;
+  }
+}
