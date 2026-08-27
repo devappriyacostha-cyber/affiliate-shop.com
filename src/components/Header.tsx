@@ -175,6 +175,231 @@ export default function Header({
     setShowDropdown(false);
   };
 
+  // Shared suggestions/history dropdown, rendered under BOTH the
+  // desktop search bar and the mobile search bar so search results
+  // actually show up on phones too.
+  const renderSearchDropdown = () => {
+    if (!showDropdown || !(searchQuery.length > 0 || history.length > 0)) {
+      return null;
+    }
+
+    return (
+      <div className="
+        absolute
+        top-full left-0
+        w-full
+        bg-white
+        mt-2
+        rounded-2xl
+        shadow-2xl
+        border border-gray-100
+        overflow-hidden
+        z-[60]
+      ">
+
+        {searchQuery.length > 0 ? (
+
+          <div>
+
+            {suggestions.length > 0 ? (
+
+              suggestions.map(
+                (suggestion) => (
+
+                  <Link
+                    key={suggestion.id}
+                    href={`/product/${suggestion.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="
+                      flex items-center
+                      gap-3 p-3
+                      transition
+                    "
+                    onClick={() =>
+                      setShowDropdown(
+                        false
+                      )
+                    }
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "color-mix(in srgb, var(--hover) 6%, white)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor =
+                        "";
+                    }}
+                  >
+
+                    <Image
+                      src={
+                        suggestion
+                          .imageUrls?.[0] ||
+                        "/logo.png"
+                      }
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="
+                        w-10 h-10
+                        object-contain
+                        rounded
+                      "
+                    />
+
+                    <div>
+
+                      <div className="
+                        text-sm
+                        font-bold
+                        text-gray-800
+                        line-clamp-1
+                      ">
+                        {suggestion.name}
+                      </div>
+
+                      <div
+                        className="
+                          text-xs
+                          font-bold
+                        "
+                        style={{
+                          color:
+                            "var(--header-cta)",
+                        }}
+                      >
+                        Rs.{" "}
+                        {parseFloat(
+                          suggestion.price
+                        ).toLocaleString()}
+                      </div>
+
+                    </div>
+
+                  </Link>
+
+                )
+              )
+
+            ) : (
+
+              <div className="
+                p-4
+                text-center
+                text-gray-400
+                text-sm
+                italic
+              ">
+                No products found
+              </div>
+
+            )}
+
+          </div>
+
+        ) : (
+
+          history.length > 0 && (
+
+            <div className="p-2">
+
+              <div className="
+                flex
+                items-center
+                justify-between
+                px-3 py-2
+              ">
+
+                <div className="
+                  text-[10px]
+                  font-bold
+                  text-gray-400
+                  uppercase
+                  tracking-widest
+                ">
+                  Recent Searches
+                </div>
+
+                <button
+                  onMouseDown={(e) => {
+
+                    e.preventDefault();
+
+                    setHistory([]);
+
+                    localStorage.removeItem(
+                      "search_history"
+                    );
+
+                  }}
+                  className="
+                    text-[10px]
+                    font-bold
+                    hover:underline
+                  "
+                  style={{
+                    color:
+                      "var(--header-cta)",
+                  }}
+                >
+                  Clear
+                </button>
+
+              </div>
+
+              {history.map(
+                (item, index) => (
+
+                  <button
+                    key={index}
+                    type="button"
+                    onMouseDown={(e) => {
+
+                      e.preventDefault();
+
+                      handleSearch(
+                        null,
+                        item
+                      );
+
+                    }}
+                    className="
+                      w-full
+                      flex items-center
+                      gap-3
+                      px-3 py-2
+                      hover:bg-gray-50
+                      rounded-xl
+                      transition
+                      text-sm
+                      text-gray-600
+                      font-medium
+                      text-left
+                    "
+                  >
+
+                    <Search
+                      size={14}
+                      className="text-gray-400"
+                    />
+
+                    {item}
+
+                  </button>
+
+                )
+              )}
+
+            </div>
+
+          )
+
+        )}
+
+      </div>
+    );
+  };
+
   return (
     <header className="
       theme-header sticky top-0 z-50
@@ -382,227 +607,7 @@ export default function Header({
             </form>
 
             {/* SEARCH DROPDOWN */}
-            {showDropdown &&
-              (
-                searchQuery.length > 0 ||
-                history.length > 0
-              ) && (
-
-                <div className="
-                  absolute
-                  top-full left-0
-                  w-full
-                  bg-white
-                  mt-2
-                  rounded-2xl
-                  shadow-2xl
-                  border border-gray-100
-                  overflow-hidden
-                  z-[60]
-                ">
-
-                  {searchQuery.length > 0 ? (
-
-                    <div>
-
-                      {suggestions.length > 0 ? (
-
-                        suggestions.map(
-                          (suggestion) => (
-
-                            <Link
-                              key={suggestion.id}
-                              href={`/product/${suggestion.id}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="
-                                flex items-center
-                                gap-3 p-3
-                                transition
-                              "
-                              onClick={() =>
-                                setShowDropdown(
-                                  false
-                                )
-                              }
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor =
-                                  "color-mix(in srgb, var(--hover) 6%, white)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor =
-                                  "";
-                              }}
-                            >
-
-                              <Image
-                                src={
-                                  suggestion
-                                    .imageUrls?.[0] ||
-                                  "/logo.png"
-                                }
-                                alt=""
-                                width={40}
-                                height={40}
-                                className="
-                                  w-10 h-10
-                                  object-contain
-                                  rounded
-                                "
-                              />
-
-                              <div>
-
-                                <div className="
-                                  text-sm
-                                  font-bold
-                                  text-gray-800
-                                  line-clamp-1
-                                ">
-                                  {suggestion.name}
-                                </div>
-
-                                <div
-                                  className="
-                                    text-xs
-                                    font-bold
-                                  "
-                                  style={{
-                                    color:
-                                      "var(--header-cta)",
-                                  }}
-                                >
-                                  Rs.{" "}
-                                  {parseFloat(
-                                    suggestion.price
-                                  ).toLocaleString()}
-                                </div>
-
-                              </div>
-
-                            </Link>
-
-                          )
-                        )
-
-                      ) : (
-
-                        <div className="
-                          p-4
-                          text-center
-                          text-gray-400
-                          text-sm
-                          italic
-                        ">
-                          No products found
-                        </div>
-
-                      )}
-
-                    </div>
-
-                  ) : (
-
-                    history.length > 0 && (
-
-                      <div className="p-2">
-
-                        <div className="
-                          flex
-                          items-center
-                          justify-between
-                          px-3 py-2
-                        ">
-
-                          <div className="
-                            text-[10px]
-                            font-bold
-                            text-gray-400
-                            uppercase
-                            tracking-widest
-                          ">
-                            Recent Searches
-                          </div>
-
-                          <button
-                            onMouseDown={(e) => {
-
-                              e.preventDefault();
-
-                              setHistory([]);
-
-                              localStorage.removeItem(
-                                "search_history"
-                              );
-
-                            }}
-                            className="
-                              text-[10px]
-                              font-bold
-                              hover:underline
-                            "
-                            style={{
-                              color:
-                                "var(--header-cta)",
-                            }}
-                          >
-                            Clear
-                          </button>
-
-                        </div>
-
-                        {history.map(
-                          (item, index) => (
-
-                            <button
-                              key={index}
-                              type="button"
-                              onMouseDown={(e) => {
-
-                                e.preventDefault();
-
-                                handleSearch(
-                                  null,
-                                  item
-                                );
-
-                              }}
-                              className="
-                                w-full
-                                flex items-center
-                                gap-3
-                                px-3 py-2
-                                hover:bg-gray-50
-                                rounded-xl
-                                transition
-                                text-sm
-                                text-gray-600
-                                font-medium
-                                text-left
-                              "
-                            >
-
-                              <Search
-                                size={14}
-                                className="text-gray-400"
-                              />
-
-                              {item}
-
-                            </button>
-
-                          )
-                        )}
-
-                      </div>
-
-                    )
-
-                  )}
-
-                </div>
-
-              )}
+            {renderSearchDropdown()}
 
           </div>
 
@@ -660,11 +665,28 @@ export default function Header({
                 outline-none
               "
               value={searchQuery}
+              onFocus={() =>
+                setShowDropdown(true)
+              }
+              onBlur={() =>
+                setTimeout(
+                  () =>
+                    setShowDropdown(false),
+                  200
+                )
+              }
               onChange={(e) =>
                 setSearchQuery(
                   e.target.value
                 )
               }
+              onKeyDown={(e) => {
+                if (
+                  e.key === "Enter"
+                ) {
+                  setShowDropdown(false);
+                }
+              }}
             />
 
             <button
@@ -690,6 +712,8 @@ export default function Header({
             </button>
 
           </form>
+
+          {renderSearchDropdown()}
 
         </div>
 
